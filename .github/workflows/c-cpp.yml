@@ -17,7 +17,7 @@ jobs:
     - name: Setup Instalation Location
       shell: cmd
       run: |
-        mkdir ${env.$ILOC}
+        mkdir "${ILOC}"
         # set PKG_CONFIG_PATH=d:/a/local/lib/pkgconfig
         # echo "PKG_CONFIG_PATH=d:/a/local/lib/pkgconfig" >> $GITHUB_ENV
     - name: Build and Install zlib

@@ -91,7 +91,7 @@ jobs:
       run: |
              git clone --depth 1 https://github.com/uclouvain/openjpeg.git
              cd openjpeg
-             cmake -Bbuild -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=d:/a/local -DCMAKE_INSTALL_PREFIX=d:/a/local -DCMAKE_LINK_DIRECTORIES_AFTER=d:/a/local/lib
+             cmake -Bbuild -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=d:/a/local -DCMAKE_INSTALL_PREFIX=d:/a/local -DCMAKE_LIBRARY_PATH=d:/a/local/lib
              cmake --build build --config Release --target install
              cd ..
 
@@ -125,7 +125,6 @@ jobs:
             set PATH=d:/a/local/bin;%PATH%
             tesseract -v
             tesseract --list-langs
-            tesseract test/testing/phototest.tif -
 
             
     - name: Upload Build Results

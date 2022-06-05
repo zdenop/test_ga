@@ -1,6 +1,5 @@
-# Based on https://github.com/zdenop/tesserocr/actions/runs/691257659/workflow
 # Build Tesseract on Windows using cmake. No Training Tools.
-name: cmake-win64
+name: VS2019-win64
 on:
   #push:
   schedule:
@@ -27,6 +26,7 @@ jobs:
         uses: actions/checkout@v2
         with:
           submodules: recursive
+
 
       - name: Build and Install leptonica dependencies
         shell: cmd

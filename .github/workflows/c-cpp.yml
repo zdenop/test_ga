@@ -1,0 +1,41 @@
+name: C/C++ CI
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ "main" ]
+#   pull_request:
+#     branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: windows-latest
+    matrix:    
+      config:
+      - {
+            name: "Windows Latest MSVC - cmake", artifact: "Windows-MSVC",
+            os: windows-latest,
+            cc: "cl", cxx: "cl",
+            environment_script: "C:/Program Files (x86)/Microsoft Visual Studio/2019/Enterprise/VC/Auxiliary/Build/vcvars64.bat"
+          }
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Setup Instalation Location
+      shell: cmd
+      run: |
+        mkdir d:/a/local
+        set PKG_CONFIG_PATH=d:/a/local/lib/pkgconfig
+        echo "PKG_CONFIG_PATH=d:/a/local/lib/pkgconfig" >> $GITHUB_ENV
+    - name: Build and Install zlib
+      shell: cmd
+      run: |
+        curl -sSL -o zlib1212.zip https://zlib.net/zlib1212.zip
+        unzip.exe zlib1212.zip
+        cd zlib-1.2.12
+        cmake -Bbuild -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=d:/a/local -DCMAKE_INSTALL_PREFIX=d:/a/local
+        cmake --build build --config Release --target install
+    - name: make check
+      run: make check
+    - name: make distcheck
+      run: make distcheck

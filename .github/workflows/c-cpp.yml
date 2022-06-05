@@ -17,6 +17,10 @@ jobs:
     - name: Setup Instalation Location
       shell: cmd
       run: |
+        echo "just iloc"      
+        echo "${ILOC}"
+        echo "env"
+        echo env.ILOC
         mkdir "${ILOC}"
         # set PKG_CONFIG_PATH=d:/a/local/lib/pkgconfig
         # echo "PKG_CONFIG_PATH=d:/a/local/lib/pkgconfig" >> $GITHUB_ENV

@@ -41,10 +41,72 @@ jobs:
         git clone --depth 1 https://github.com/webmproject/libwebp.git && cd libwebp
         cmake -Bbuild -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=d:/a/local -DCMAKE_INSTALL_PREFIX=d:/a/local -DWEBP_BUILD_ANIM_UTILS=OFF -DWEBP_BUILD_CWEBP=OFF -DWEBP_BUILD_DWEBP=OFF -DWEBP_BUILD_GIF2WEBP=OFF -DWEBP_BUILD_IMG2WEBP=OFF -DWEBP_BUILD_VWEBP=OFF -DWEBP_BUILD_WEBPMUX=OFF -DWEBP_BUILD_WEBPINFO=OFF -DWEBP_BUILD_EXTRAS=OFF
         cmake --build build --config Release --target install
-            
+
+    - name: Build and Install giflib
+      shell: cmd
+      run: |
+             curl -sSL -o giflib-master.zip https://codeload.github.com/xbmc/giflib/zip/master
+             unzip giflib-master.zip
+             cd giflib-master
+             cmake -Bbuild -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=d:/a/local -DCMAKE_INSTALL_PREFIX=d:/a/local
+             cmake --build build --config Release --target install
+
+    - name: Build and Install libjpeg
+      shell: cmd
+      run: |
+             git clone --depth 1 https://github.com/libjpeg-turbo/libjpeg-turbo.git
+             cd libjpeg-turbo
+             cmake -Bbuild -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=d:/a/local -DCMAKE_INSTALL_PREFIX=d:/a/local
+             cmake --build build --config Release --target install
+
+    - name: Build and Install openjpeg
+      shell: cmd
+      run: |
+             git clone --depth 1 https://github.com/uclouvain/openjpeg.git
+             cd openjpeg
+             cmake -Bbuild -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=d:/a/local -DCMAKE_INSTALL_PREFIX=d:/a/local
+             cmake --build build --config Release --target install
+             cd ..
+
+    - name: Build and Install jbigkit
+      shell: cmd
+      run: |
+             git clone --depth 1 https://github.com/zdenop/jbigkit
+             cd jbigkit-2.1
+             cmake -Bbuild -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=d:/a/local -DCMAKE_INSTALL_PREFIX=d:/a/local
+             cmake --build build --config Release --target install
+             cd ..
+
+    - name: Build and Install zstd
+      shell: cmd
+      run: |
+             git clone --depth 1 https://github.com/facebook/zstd.git
+             cd zstd
+             cmake -Bbuild -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=d:/a/local -DCMAKE_INSTALL_PREFIX=d:/a/local
+             cmake --build build --config Release --target install
+             cd ..
+
+    - name: Build and Install libtiff
+      shell: cmd
+      run: |
+             git clone --depth 1 https://gitlab.com/libtiff/libtiff
+             cd libtiff
+             cmake -Bbuild -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=d:/a/local -DCMAKE_INSTALL_PREFIX=d:/a/local
+             cmake --build build --config Release --target install
+             cd ..
+
+    - name: Build and Install leptonica
+      shell: cmd
+      run: |
+             echo "Building leptonica..."
+             git clone --depth 1 https://github.com/zdenop/leptonica.git && cd leptonica
+             git checkout cmake_improve
+             cmake -Bbuild -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=d:/a/local -DCMAKE_INSTALL_PREFIX=d:/a/local -DBUILD_PROG=OFF -DSW_BUILD=OFF -DBUILD_SHARED_LIBS=ON
+             cmake --build build --config Release --target install
+
     - name: Upload Build Results
       uses: actions/upload-artifact@v2
       with:
         name: tesseract-cmake-win64
-        path: $ILOC
+        path: d:/a/local
         retention-days: 5

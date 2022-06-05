@@ -17,22 +17,14 @@ jobs:
     - name: Setup Instalation Location
       shell: cmd
       run: |
-        echo "just iloc"      
-        echo "${ILOC}"
-        echo ${ILOC}
-        echo ${{ILOC}}
-        echo "env"
-        echo env.ILOC
-        mkdir "${ILOC}"
-        # set PKG_CONFIG_PATH=d:/a/local/lib/pkgconfig
-        # echo "PKG_CONFIG_PATH=d:/a/local/lib/pkgconfig" >> $GITHUB_ENV
+        mkdir d:\a\local  
     - name: Build and Install zlib
       shell: cmd
       run: |
         curl -sSL -o zlib1212.zip https://zlib.net/zlib1212.zip
         unzip.exe zlib1212.zip
         cd zlib-1.2.12
-        cmake -Bbuild -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=$ILOCl -DCMAKE_INSTALL_PREFIX=$ILOC
+        cmake -Bbuild -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=d:/a/local -DCMAKE_INSTALL_PREFIX=d:/a/local
         cmake --build build --config Release --target install
     - name: Build and Install libpng
       shell: cmd

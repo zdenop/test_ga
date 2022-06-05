@@ -19,6 +19,8 @@ jobs:
       run: |
         echo "just iloc"      
         echo "${ILOC}"
+        echo ${ILOC}
+        echo ${{ILOC}}
         echo "env"
         echo env.ILOC
         mkdir "${ILOC}"

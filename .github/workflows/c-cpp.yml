@@ -82,7 +82,7 @@ jobs:
       run: |
              git clone --depth 1 https://gitlab.com/libtiff/libtiff
              cd libtiff
-             cmake -Bbuild -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=d:/a/local -DCMAKE_INSTALL_PREFIX=d:/a/local
+             cmake -Bbuild -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=d:/a/local -DCMAKE_INSTALL_PREFIX=d:/a/local -Dtiff-tools=OFF -Dtiff-tests=OFF -Dtiff-contrib=OFF -Dtiff-docs=OFF
              cmake --build build --config Release --target install
              cd ..
 
@@ -106,8 +106,9 @@ jobs:
     - name: Remove not needed tools Before building tesseract
       shell: cmd
       run: >
-        rm -f d:/a/local/bin/*.exe
-        rm -f d:/a/local/share/man/man1/*
+          echo "Turned off"
+#         rm -f d:/a/local/bin/*.exe
+#         rm -f d:/a/local/share/man/man1/*
         
     - name: Build and Install tesseract
       shell: cmd

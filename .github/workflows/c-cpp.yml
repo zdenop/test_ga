@@ -91,7 +91,7 @@ jobs:
       run: |
              git clone --depth 1 https://github.com/uclouvain/openjpeg.git
              cd openjpeg
-             cmake -Bbuild -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=d:/a/local -DCMAKE_INSTALL_PREFIX=d:/a/local -DCMAKE_LIBRARY_PATH=d:/a/local/lib
+             cmake -Bbuild -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=d:/a/local -DCMAKE_INSTALL_PREFIX=d:/a/local -DCMAKE_LIBRARY_PATH=d:/a/local/lib -DBUILD_CODEC=OFF -DBUILD_TESTING=OFF -DBUILD_DOC=OFF
              cmake --build build --config Release --target install
              cd ..
 
@@ -126,7 +126,6 @@ jobs:
             set PATH=d:/a/local/bin;%PATH%
             tesseract -v
             tesseract --list-langs
-
             
     - name: Upload Build Results
       uses: actions/upload-artifact@v2

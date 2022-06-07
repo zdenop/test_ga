@@ -107,7 +107,7 @@ jobs:
       shell: cmd
       run: >
           echo "Turned off"
-        rm -f d:/a/local/bin/*.exe
+          rm -f d:/a/local/bin/*.exe
 #        rm -f d:/a/local/share/man/man1/*
         
     - name: Build and Install tesseract

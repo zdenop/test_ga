@@ -5,26 +5,27 @@ on:
   push:
     branches: [ "main" ]
 
-# env:
-#  ILOC: d:/a/local
-  
+env:
+  ILOC: d:/a/local
+
 jobs:
   build:
     runs-on: windows-latest
 
     steps:
     - uses: ilammy/setup-nasm@v1
-    - uses: actions/checkout@v3    
+    - uses: actions/checkout@v3
     - name: Setup Instalation Location
       run: |
-        mkdir d:\a\local  
+        mkdir ${{env.ILOC}}
+        echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
     - name: Build and Install zlib (libpng & leptonica dependency)
       shell: cmd
       run: |
-        curl -sSL -o zlib1212.zip https://zlib.net/zlib1212.zip
-        unzip.exe -qq zlib1212.zip
-        cd zlib-1.2.12
-        cmake -Bbuild -DCMAKE_PREFIX_PATH=d:/a/local -DCMAKE_INSTALL_PREFIX=d:/a/local
+        git clone --depth 1 https://github.com/zlib-ng/zlib-ng.git
+        cd zlib-ng
+        cmake -Bbuild -DCMAKE_PREFIX_PATH=${{env.ILOC}} -DCMAKE_INSTALL_PREFIX=${{env.ILOC}} -DENABLE_SHARED=OFF -DZLIB_COMPAT=ON -DZLIB_ENABLE_TESTS=OFF -DINSTALL_UTILS=OFF
+        cmake -Bbuild -DCMAKE_PREFIX_PATH=${{env.ILOC}} -DCMAKE_INSTALL_PREFIX=${{env.ILOC}} -DZLIB_COMPAT=ON -DZLIB_ENABLE_TESTS=OFF -DINSTALL_UTILS=OFF
         cmake --build build --config Release --target install
     - name: Build and Install libpng (leptonica dependency)
       shell: cmd
@@ -32,7 +33,7 @@ jobs:
         curl -sSL -o lpng1637.zip https://download.sourceforge.net/libpng/lpng1637.zip
         unzip.exe -qq lpng1637.zip
         cd lpng1637
-        cmake -Bbuild -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=d:/a/local -DCMAKE_INSTALL_PREFIX=d:/a/local -DPNG_TESTS=OFF
+        cmake -Bbuild -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=${{env.ILOC}} -DCMAKE_INSTALL_PREFIX=${{env.ILOC}} -DPNG_TESTS=OFF
         cmake --build build --config Release --target install
 
     - name: Build and Install giflib (leptonica dependency)
@@ -41,7 +42,7 @@ jobs:
              curl -sSL -o giflib-master.zip https://codeload.github.com/xbmc/giflib/zip/master
              unzip -qq giflib-master.zip
              cd giflib-master
-             cmake -Bbuild -DCMAKE_PREFIX_PATH=d:/a/local -DCMAKE_INSTALL_PREFIX=d:/a/local
+             cmake -Bbuild -DCMAKE_PREFIX_PATH=${{env.ILOC}} -DCMAKE_INSTALL_PREFIX=${{env.ILOC}}
              cmake --build build --config Release --target install
 
     - name: Build and Install libjpeg (leptonica & libtiff dependency)
@@ -49,7 +50,7 @@ jobs:
       run: |
              git clone --depth 1 https://github.com/libjpeg-turbo/libjpeg-turbo.git
              cd libjpeg-turbo
-             cmake -Bbuild -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=d:/a/local -DCMAKE_INSTALL_PREFIX=d:/a/local
+             cmake -Bbuild -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=${{env.ILOC}} -DCMAKE_INSTALL_PREFIX=${{env.ILOC}}
              cmake --build build --config Release --target install
 
     - name: Build and Install jbigkit (libtiff dependency)
@@ -57,7 +58,7 @@ jobs:
       run: |
              git clone --depth 1 https://github.com/zdenop/jbigkit.git
              cd jbigkit
-             cmake -Bbuild -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=d:/a/local -DCMAKE_INSTALL_PREFIX=d:/a/local
+             cmake -Bbuild -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=${{env.ILOC}} -DCMAKE_INSTALL_PREFIX=${{env.ILOC}}
              cmake --build build --config Release --target install
              cd ..
 
@@ -66,7 +67,7 @@ jobs:
       run: |
              git clone --depth 1 https://github.com/facebook/zstd.git
              cd zstd/build/cmake
-             cmake -Bbuild -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=d:/a/local -DCMAKE_INSTALL_PREFIX=d:/a/local -DZSTD_BUILD_PROGRAMS=OFF -DBUILD_TESTING=OFF
+             cmake -Bbuild -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=${{env.ILOC}} -DCMAKE_INSTALL_PREFIX=${{env.ILOC}} -DZSTD_BUILD_PROGRAMS=OFF -DBUILD_TESTING=OFF
              cmake --build build --config Release --target install
              cd ..
 
@@ -74,7 +75,7 @@ jobs:
       shell: cmd
       run: |
         git clone --depth 1 https://github.com/webmproject/libwebp.git && cd libwebp
-        cmake -Bbuild -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=d:/a/local -DCMAKE_INSTALL_PREFIX=d:/a/local -DWEBP_BUILD_ANIM_UTILS=OFF -DWEBP_BUILD_CWEBP=OFF -DWEBP_BUILD_DWEBP=OFF -DWEBP_BUILD_GIF2WEBP=OFF -DWEBP_BUILD_IMG2WEBP=OFF -DWEBP_BUILD_VWEBP=OFF -DWEBP_BUILD_WEBPMUX=OFF -DWEBP_BUILD_WEBPINFO=OFF -DWEBP_BUILD_EXTRAS=OFF
+        cmake -Bbuild -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=${{env.ILOC}} -DCMAKE_INSTALL_PREFIX=${{env.ILOC}} -DWEBP_BUILD_ANIM_UTILS=OFF -DWEBP_BUILD_CWEBP=OFF -DWEBP_BUILD_DWEBP=OFF -DWEBP_BUILD_GIF2WEBP=OFF -DWEBP_BUILD_IMG2WEBP=OFF -DWEBP_BUILD_VWEBP=OFF -DWEBP_BUILD_WEBPMUX=OFF -DWEBP_BUILD_WEBPINFO=OFF -DWEBP_BUILD_EXTRAS=OFF
         cmake --build build --config Release --target install
 
     - name: Build and Install libtiff (openjpeg & leptonica dependency)
@@ -82,7 +83,7 @@ jobs:
       run: |
              git clone --depth 1 https://gitlab.com/libtiff/libtiff
              cd libtiff
-             cmake -Bbuild -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=d:/a/local -DCMAKE_INSTALL_PREFIX=d:/a/local -Dtiff-tools=OFF -Dtiff-tests=OFF -Dtiff-contrib=OFF -Dtiff-docs=OFF
+             cmake -Bbuild -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=${{env.ILOC}} -DCMAKE_INSTALL_PREFIX=${{env.ILOC}} -Dtiff-tools=OFF -Dtiff-tests=OFF -Dtiff-contrib=OFF -Dtiff-docs=OFF
              cmake --build build --config Release --target install
              cd ..
 
@@ -91,7 +92,7 @@ jobs:
       run: |
              git clone --depth 1 https://github.com/uclouvain/openjpeg.git
              cd openjpeg
-             cmake -Bbuild -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=d:/a/local -DCMAKE_INSTALL_PREFIX=d:/a/local -DCMAKE_LIBRARY_PATH=d:/a/local/lib -DBUILD_CODEC=OFF -DBUILD_TESTING=OFF -DBUILD_DOC=OFF
+             cmake -Bbuild -DCMAKE_PREFIX_PATH=${{env.ILOC}} -DCMAKE_INSTALL_PREFIX=${{env.ILOC}} -DBUILD_CODEC=OFF -DBUILD_TESTING=OFF -DBUILD_DOC=OFF -DCMAKE_WARN_DEPRECATED=OFF
              cmake --build build --config Release --target install
              cd ..
 
@@ -100,36 +101,35 @@ jobs:
       run: |
              git clone --depth 1 https://github.com/DanBloomberg/leptonica.git
              cd leptonica
-             cmake -Bbuild -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=d:/a/local -DCMAKE_INSTALL_PREFIX=d:/a/local -DSW_BUILD=OFF -DBUILD_PROG=OFF -DBUILD_SHARED_LIBS=ON
+             cmake -Bbuild -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=${{env.ILOC}} -DCMAKE_INSTALL_PREFIX=${{env.ILOC}} -DSW_BUILD=OFF -DBUILD_PROG=OFF -DBUILD_SHARED_LIBS=ON
              cmake --build build --config Release --target install
 
     - name: Remove not needed tools Before building tesseract
       shell: cmd
       run: >
-          echo "Turned off"
-          rm -f d:/a/local/bin/*.exe
-#        rm -f d:/a/local/share/man/man1/*
-        
+          rm -Rf ${{env.ILOC}}/bin/*.exe
+#        rm -f ${{env.ILOC}}/share/man/man1/*
+
     - name: Build and Install tesseract
       shell: cmd
       run: |
             git clone --depth 1 https://github.com/tesseract-ocr/tesseract
             cd tesseract
-            cmake -E env CXXFLAGS="/Qpar /fp:fast" cmake -Bbuild -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=d:/a/local -DCMAKE_INSTALL_PREFIX=d:/a/local -DSW_BUILD=OFF -DBUILD_SHARED_LIBS=ON -DENABLE_LTO=ON -DBUILD_TRAINING_TOOLS=OFF -DFAST_FLOAT=ON
+            cmake -E env CXXFLAGS="/Qpar /fp:fast" cmake -Bbuild -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=${{env.ILOC}} -DCMAKE_INSTALL_PREFIX=${{env.ILOC}} -DSW_BUILD=OFF -DBUILD_SHARED_LIBS=ON -DENABLE_LTO=ON -DBUILD_TRAINING_TOOLS=OFF -DFAST_FLOAT=ON
             # -DOPENMP_BUILD=ON
             cmake --build build --config Release --target install
-            curl -L https://github.com/tesseract-ocr/tessdata/raw/main/eng.traineddata --output d:/a/local/share/tessdata/eng.traineddata
-            curl -L https://github.com/tesseract-ocr/tessdata/raw/main/osd.traineddata --output d:/a/local/share/tessdata/osd.traineddata
+            curl -L https://github.com/tesseract-ocr/tessdata/raw/main/eng.traineddata --output ${{env.ILOC}}/share/tessdata/eng.traineddata
+            curl -L https://github.com/tesseract-ocr/tessdata/raw/main/osd.traineddata --output ${{env.ILOC}}/share/tessdata/osd.traineddata
             # git clone --depth 1 https://github.com/tesseract-ocr/tessconfigs
             # move tessconfigs d:\a\local\share\tessdata
-            set TESSDATA_PREFIX=d:/a/local/share/tessdata
-            set PATH=d:/a/local/bin;%PATH%
+            set TESSDATA_PREFIX=${{env.ILOC}}/share/tessdata
+            set PATH=${{env.ILOC}}/bin;%PATH%
             tesseract -v
             tesseract --list-langs
-            
+
     - name: Upload Build Results
       uses: actions/upload-artifact@v2
       with:
-        name: win64
-        path: d:/a/local
+        name: tesseract-${{ env.RELEASE_VERSION }}-VS2019_win64
+        path: ${{env.ILOC}}
         retention-days: 5

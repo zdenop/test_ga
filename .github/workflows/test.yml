@@ -33,10 +33,24 @@ jobs:
       - name: Run a one-line script
         run: echo  "the var was detected to be test = " %MYVAR%
 
+      # Runs a single command using the runners shell2
+      - name: Run a one-line script
+        run: echo  "the var was detected to be test = " $MYVAR
+        
+
+      # Runs a single command using the runners shell3
+      - name: Run a one-line script
+        run: echo  "the var was detected to be test = " ${MYVAR}
+        
+      # Runs a single command using the runners shell3
+      - name: Run a one-line script
+        run: echo  "the var was detected to be test = " ${{env.MYVAR}}        
+        
+        
       # Runs a set of commands using the runners shell
       - name: Run a multi-line script
         run: |
           echo Add other actions to build,
           echo test, and deploy your project.
-          curl -sSL -o xz-5.3.2alpha.tar.gz https://tukaani.org/xz/xz-5.3.2alpha.tar.gz
-          tar -xvf xz-5.3.2alpha.tar.gz
+#          curl -sSL -o xz-5.3.2alpha.tar.gz https://tukaani.org/xz/xz-5.3.2alpha.tar.gz
+#          tar -xvf xz-5.3.2alpha.tar.gz

@@ -15,16 +15,17 @@ jobs:
     steps:
     - uses: ilammy/setup-nasm@v1
     - uses: actions/checkout@v3
+    - name: Set env
+      run: echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
     - name: Setup Instalation Location
       run: |
         mkdir ${{env.ILOC}}
-        echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
-    - name: Build and Install zlib (libpng & leptonica dependency)
+    - name: Build and Install zlib-ng (libpng & leptonica dependency)
       shell: cmd
       run: |
         git clone --depth 1 https://github.com/zlib-ng/zlib-ng.git
         cd zlib-ng
-        cmake -Bbuild -DCMAKE_PREFIX_PATH=${{env.ILOC}} -DCMAKE_INSTALL_PREFIX=${{env.ILOC}} -DENABLE_SHARED=OFF -DZLIB_COMPAT=ON -DZLIB_ENABLE_TESTS=OFF -DINSTALL_UTILS=OFF
+        cmake -Bbuild -DCMAKE_PREFIX_PATH=${{env.ILOC}} -DCMAKE_INSTALL_PREFIX=${{env.ILOC}} -DBUILD_SHARED_LIBS=OFF -DZLIB_COMPAT=ON -DZLIB_ENABLE_TESTS=OFF -DINSTALL_UTILS=OFF
         cmake -Bbuild -DCMAKE_PREFIX_PATH=${{env.ILOC}} -DCMAKE_INSTALL_PREFIX=${{env.ILOC}} -DZLIB_COMPAT=ON -DZLIB_ENABLE_TESTS=OFF -DINSTALL_UTILS=OFF
         cmake --build build --config Release --target install
     - name: Build and Install libpng (leptonica dependency)
@@ -33,7 +34,7 @@ jobs:
         curl -sSL -o lpng1637.zip https://download.sourceforge.net/libpng/lpng1637.zip
         unzip.exe -qq lpng1637.zip
         cd lpng1637
-        cmake -Bbuild -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=${{env.ILOC}} -DCMAKE_INSTALL_PREFIX=${{env.ILOC}} -DPNG_TESTS=OFF
+        cmake -Bbuild -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=${{env.ILOC}} -DCMAKE_INSTALL_PREFIX=${{env.ILOC}} -DPNG_TESTS=OFF -DPNG_SHARED=OFF
         cmake --build build --config Release --target install
 
     - name: Build and Install giflib (leptonica dependency)
@@ -50,7 +51,7 @@ jobs:
       run: |
              git clone --depth 1 https://github.com/libjpeg-turbo/libjpeg-turbo.git
              cd libjpeg-turbo
-             cmake -Bbuild -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=${{env.ILOC}} -DCMAKE_INSTALL_PREFIX=${{env.ILOC}}
+             cmake -Bbuild -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=${{env.ILOC}} -DCMAKE_INSTALL_PREFIX=${{env.ILOC}} -DWITH_TURBOJPEG=OFF -DENABLE_SHARED=OFF
              cmake --build build --config Release --target install
 
     - name: Build and Install jbigkit (libtiff dependency)
@@ -58,7 +59,7 @@ jobs:
       run: |
              git clone --depth 1 https://github.com/zdenop/jbigkit.git
              cd jbigkit
-             cmake -Bbuild -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=${{env.ILOC}} -DCMAKE_INSTALL_PREFIX=${{env.ILOC}}
+             cmake -Bbuild -DCMAKE_PREFIX_PATH=${{env.ILOC}} -DCMAKE_INSTALL_PREFIX=${{env.ILOC}} -DBUILD_PROGRAMS=OFF -DBUILD_TOOLS=OFF -DCMAKE_WARN_DEPRECATED=OFF
              cmake --build build --config Release --target install
              cd ..
 
@@ -104,18 +105,25 @@ jobs:
              cmake -Bbuild -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=${{env.ILOC}} -DCMAKE_INSTALL_PREFIX=${{env.ILOC}} -DSW_BUILD=OFF -DBUILD_PROG=OFF -DBUILD_SHARED_LIBS=ON
              cmake --build build --config Release --target install
 
+    - name: Build and Install ibarchive
+      shell: cmd
+      run: |
+             git clone --depth 1 https://github.com/libarchive/libarchive.git
+             cd libarchive
+             cmake -Bbuild -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=${{env.ILOC}} -DCMAKE_INSTALL_PREFIX=${{env.ILOC}}
+             cmake --build build --config Release --target install
+
     - name: Remove not needed tools Before building tesseract
       shell: cmd
       run: >
           rm -Rf ${{env.ILOC}}/bin/*.exe
-#        rm -f ${{env.ILOC}}/share/man/man1/*
 
     - name: Build and Install tesseract
       shell: cmd
       run: |
             git clone --depth 1 https://github.com/tesseract-ocr/tesseract
             cd tesseract
-            cmake -E env CXXFLAGS="/Qpar /fp:fast" cmake -Bbuild -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=${{env.ILOC}} -DCMAKE_INSTALL_PREFIX=${{env.ILOC}} -DSW_BUILD=OFF -DBUILD_SHARED_LIBS=ON -DENABLE_LTO=ON -DBUILD_TRAINING_TOOLS=OFF -DFAST_FLOAT=ON
+            cmake -E env CXXFLAGS="/Qpar /fp:fast" cmake -Bbuild -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=${{env.ILOC}} -DCMAKE_INSTALL_PREFIX=${{env.ILOC}} -DSW_BUILD=OFF -DBUILD_SHARED_LIBS=ON -DENABLE_LTO=ON -DBUILD_TRAINING_TOOLS=OFF -DFAST_FLOAT=ON -DGRAPHICS_DISABLED=ON
             # -DOPENMP_BUILD=ON
             cmake --build build --config Release --target install
             curl -L https://github.com/tesseract-ocr/tessdata/raw/main/eng.traineddata --output ${{env.ILOC}}/share/tessdata/eng.traineddata
@@ -130,6 +138,6 @@ jobs:
     - name: Upload Build Results
       uses: actions/upload-artifact@v2
       with:
-        name: tesseract-${{ env.RELEASE_VERSION }}-VS2019_win64
+        name: tesseract-${{env.RELEASE_VERSION}}-VS2019_win64
         path: ${{env.ILOC}}
         retention-days: 5

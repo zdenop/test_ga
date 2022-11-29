@@ -58,9 +58,9 @@ jobs:
       # Runs a set of commands using the runners shell
       - name: Run a multi-line script
         run: |
-          echo Add other actions to build,
+          echo "Add other actions to build,"
           echo  "steps.get_version.outputs.version = " ${{steps.get_version.outputs.version}}
-          echo test, and deploy your project.
+          echo "test, and deploy your project".
 #          curl -sSL -o xz-5.3.2alpha.tar.gz https://tukaani.org/xz/xz-5.3.2alpha.tar.gz
 #          tar -xvf xz-5.3.2alpha.tar.gz
       - name: Set env
@@ -75,16 +75,17 @@ jobs:
           echo "GITHUB_VER:" $GITHUB_VER
           echo "env.GITVER: ${{env.GITVER}}"
 
-      - name: Run a multi-line script
+      - name: Test Show Variables
 #        env:
 #          GITVER: ${{git describe --tags HEAD}}
         shell: cmd
         run: |
-          echo "Project ${{env.GITVER}}"
+          echo "Project env ${{env.GITVER}}"
+          echo "Project GITVER ${GITVER}"
           echo "Project ${{env.GITVER}}" > version.txt
 
       - name: Other tests
 #          gitver="$($git describe --always --tags --abbrev=10 "${CI_COMMIT_SHA}")"
         run: |
-          gitver= $(git describe --tags HEAD)
+          echo $(git describe --tags HEAD)
           echo "set gitver to ${gitver}"

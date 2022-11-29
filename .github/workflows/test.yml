@@ -73,8 +73,8 @@ jobs:
           echo $GITHUB_VER
 
       - name: Run a multi-line script
-        env:
-          GITVER: ${{git describe --tags HEAD}}
+#        env:
+#          GITVER: ${{git describe --tags HEAD}}
         shell: cmd
         run: |
           echo "Project ${{env.GITVER}}"

@@ -38,7 +38,7 @@ jobs:
       - run: echo ${{ steps.get_version.outputs.version }}
 
       - name: Get the version tesseract way
-        id: get_version
+        id: get_version_battila7
         run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}
 
       # Runs a single command using the runners shell

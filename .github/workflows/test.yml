@@ -88,4 +88,5 @@ jobs:
 #          gitver="$($git describe --always --tags --abbrev=10 "${CI_COMMIT_SHA}")"
         run: |
           echo $(git describe --tags HEAD)
-          echo "set gitver to ${gitver}"
+          VER=$(git describe --tags HEAD)
+          echo "set VER to ${VER}"

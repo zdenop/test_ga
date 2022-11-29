@@ -62,3 +62,8 @@ jobs:
           echo test, and deploy your project.
 #          curl -sSL -o xz-5.3.2alpha.tar.gz https://tukaani.org/xz/xz-5.3.2alpha.tar.gz
 #          tar -xvf xz-5.3.2alpha.tar.gz
+
+      - name: Run a multi-line script
+        run: |
+          gitver="$($git describe --always --tags --abbrev=10 "${CI_COMMIT_SHA}")"
+          echo "Project $gitver" > version.txt

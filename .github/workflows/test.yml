@@ -90,6 +90,10 @@ jobs:
           echo $(git describe --tags HEAD)
           $VER=$(git describe --tags HEAD)
           echo "set VER to ${VER}"
+          echo "VERSION_SHORT=${VER}" >> $GITHUB_ENV
 
-      - name: tesseract-$(git describe --tags HEAD)-VS2019_win64
-        run: echo "set well done in ${VER}"
+      - name: tesseract-"$(git describe --tags HEAD)"-VS2019_win64
+        run: |
+          echo "set well done in ${env.VERSION_SHORT}"
+          echo "set well II done in ${{env.VERSION_SHORT}}"
+

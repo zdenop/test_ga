@@ -28,7 +28,7 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
-      - run: git fetch --prune --unshallow
+      - run: git fetch --prune --unshallow --tags
 
       # Runs a single command using the runners shell
       - name: Run a one-line script
@@ -70,8 +70,10 @@ jobs:
 
       - name: Test
         run: |
-          echo $GITHUB_SHA_SHORT
-          echo $GITHUB_VER
+          echo "GITHUB_SHA_SHORT" $GITHUB_SHA_SHORT
+          echo "env.GITHUB_VER" $env.GITHUB_VER
+          echo "GITHUB_VER:" $GITHUB_VER
+          echo "env.GITVER: ${{env.GITVER}}"
 
       - name: Run a multi-line script
 #        env:
@@ -80,5 +82,9 @@ jobs:
         run: |
           echo "Project ${{env.GITVER}}"
           echo "Project ${{env.GITVER}}" > version.txt
+
+      - name: Other tests
 #          gitver="$($git describe --always --tags --abbrev=10 "${CI_COMMIT_SHA}")"
-#          gitver="$(git describe --tags HEAD)"
+        run: |
+          gitver= $(git describe --tags HEAD)
+          echo "set gitver to ${gitver}"

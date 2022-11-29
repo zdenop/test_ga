@@ -91,7 +91,7 @@ jobs:
           $VER=$(git describe --tags HEAD)
           echo "set VER to ${VER}"
           ${env.VERA}=${VER}
-          $env.VERO=${VER}
+          env.VERO=${VER}
           echo "VERSION_SHORT=${VER}" >> $GITHUB_ENV
 
       - name: tesseract-"$(git describe --tags HEAD)"-VS2019_win64

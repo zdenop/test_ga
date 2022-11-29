@@ -16,8 +16,7 @@ on:
 
 env:
   MYVAR:  d:/a/destination/
-  GITVER: $(git describe --tags HEAD)
-  
+
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   # This workflow contains a single job called "build"
@@ -63,8 +62,19 @@ jobs:
           echo test, and deploy your project.
 #          curl -sSL -o xz-5.3.2alpha.tar.gz https://tukaani.org/xz/xz-5.3.2alpha.tar.gz
 #          tar -xvf xz-5.3.2alpha.tar.gz
+      - name: Set env
+        run: |
+          echo "GITHUB_SHA_SHORT=$(echo $GITHUB_SHA | cut -c 1-6)" >> $GITHUB_ENV
+          echo "GITHUB_VER=$(echo $(git describe --tags HEAD))" >> $GITHUB_ENV
+
+      - name: Test
+        run: |
+          echo $GITHUB_SHA_SHORT
+          echo $GITHUB_VER
 
       - name: Run a multi-line script
+        env:
+          GITVER: ${{git describe --tags HEAD}}
         shell: cmd
         run: |
           echo "Project ${{env.GITVER}}"

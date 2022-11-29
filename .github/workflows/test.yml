@@ -35,7 +35,9 @@ jobs:
 
       - name: Get the version
         id: get_version_tess
-        run: echo "VERSION=${GITHUB_REF/refs\/tags\//}" >> $GITHUB_OUTPUT
+        run: |
+          echo "VERSION=${GITHUB_REF/refs\/tags\//}"
+          echo "VERSION=${GITHUB_REF/refs\/tags\//}" >> $GITHUB_OUTPUT
         
       - name: Get Version
         id: get_version

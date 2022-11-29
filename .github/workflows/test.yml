@@ -28,6 +28,7 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
+      - run: git fetch --prune --unshallow
 
       # Runs a single command using the runners shell
       - name: Run a one-line script
@@ -64,8 +65,8 @@ jobs:
 #          tar -xvf xz-5.3.2alpha.tar.gz
       - name: Set env
         run: |
-          echo "GITHUB_SHA_SHORT=$(echo $GITHUB_SHA | cut -c 1-6)" >> $GITHUB_ENV
           echo "GITHUB_VER=$(echo $(git describe --tags HEAD))" >> $GITHUB_ENV
+#          echo "GITHUB_SHA_SHORT=$(echo $GITHUB_SHA | cut -c 1-6)" >> $GITHUB_ENV
 
       - name: Test
         run: |

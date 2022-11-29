@@ -16,6 +16,7 @@ on:
 
 env:
   MYVAR:  d:/a/destination/
+  GITVER: "$(git describe --tags HEAD)"
   
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -66,6 +67,7 @@ jobs:
       - name: Run a multi-line script
         shell: cmd
         run: |
-          gitver="$(git describe --tags HEAD)"
-          echo "Project $gitver" > version.txt
+          echo "Project ${{env.GITVER}}"
+          echo "Project ${{env.GITVER}}" > version.txt
 #          gitver="$($git describe --always --tags --abbrev=10 "${CI_COMMIT_SHA}")"
+#          gitver="$(git describe --tags HEAD)"

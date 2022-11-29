@@ -90,3 +90,6 @@ jobs:
           echo $(git describe --tags HEAD)
           $VER=$(git describe --tags HEAD)
           echo "set VER to ${VER}"
+
+      - name: tesseract-$(git describe --tags HEAD)-VS2019_win64
+        run: echo "set well done in ${VER}"

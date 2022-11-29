@@ -41,8 +41,7 @@ jobs:
 
       - name: Get the version tesseract way
         id: get_version_battila7
-        run: |
-          echo ${{ steps.get_version.outputs.version }}
+        run: echo ${{ steps.get_version.outputs.version }}
 
       # Runs a single command using the runners shell
       - name: Run a one-line script

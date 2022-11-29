@@ -16,7 +16,7 @@ on:
 
 env:
   MYVAR:  d:/a/destination/
-  GITVER: "$(git describe --tags HEAD)"
+  GITVER: $(git describe --tags HEAD)
   
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:

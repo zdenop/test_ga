@@ -32,14 +32,16 @@ jobs:
         with:
           submodules: recursive
       - run: git fetch --prune --unshallow --tags
-
+      - name: Get the version
+        id: get_version_tess
+        run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}
+        
       - name: Get Version
         uses: battila7/get-version-action@v2.2.1
 
       - name: Get the version tesseract way
         id: get_version_battila7
         run: |
-          echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}
           echo ${{ steps.get_version.outputs.version }}
 
       # Runs a single command using the runners shell

@@ -27,8 +27,19 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v3
+      - name: "Checkout ${{ github.ref }} ( ${{ github.sha }} )"
+        uses: actions/checkout@v3
+        with:
+          submodules: recursive
       - run: git fetch --prune --unshallow --tags
+
+      - name: Get Version
+        uses: battila7/get-version-action@v2.2.1
+      - run: echo ${{ steps.get_version.outputs.version }}
+
+      - name: Get the version tesseract way
+        id: get_version
+        run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}
 
       # Runs a single command using the runners shell
       - name: Run a one-line script
@@ -100,4 +111,6 @@ jobs:
           echo "set well II done in ${{env.VERSION_SHORT}}"
           echo "set VERA done in ${{env.VERA}}"
           echo "set VERO done in ${{env.VERO}}"
+          echo "set VERO done in ${{env.VERO}}"
+          echo "VERSION is ${VERSION}"
 

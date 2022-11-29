@@ -15,6 +15,7 @@ jobs:
     steps:
     - uses: ilammy/setup-nasm@v1
     - uses: actions/checkout@v3
+    - uses: battila7/get-version-action@v2.2.1    
     - name: Set env
       run: echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
     - name: Setup Instalation Location
@@ -25,6 +26,7 @@ jobs:
       run: |
         git clone --depth 1 https://github.com/zlib-ng/zlib-ng.git
         cd zlib-ng
+        echo ${{ steps.get_version.outputs.version }}
         cmake -Bbuild -DCMAKE_PREFIX_PATH=${{env.ILOC}} -DCMAKE_INSTALL_PREFIX=${{env.ILOC}} -DBUILD_SHARED_LIBS=OFF -DZLIB_COMPAT=ON -DZLIB_ENABLE_TESTS=OFF -DINSTALL_UTILS=OFF
         cmake -Bbuild -DCMAKE_PREFIX_PATH=${{env.ILOC}} -DCMAKE_INSTALL_PREFIX=${{env.ILOC}} -DZLIB_COMPAT=ON -DZLIB_ENABLE_TESTS=OFF -DINSTALL_UTILS=OFF
         cmake --build build --config Release --target install

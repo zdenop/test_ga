@@ -38,8 +38,12 @@ jobs:
         run: |
           echo "VERSION=${GITHUB_REF/refs\/tags\//}"
           echo "VERSION=${GITHUB_REF/refs\/tags\//}" >> $GITHUB_OUTPUT
+
+      - name: Get archive name
+        id: get-archive-name
+        run: echo "archive-name=$(echo $(git describe --tags HEAD))" >> $GITHUB_ENV       
         
-      - name: Get Version
+      - name: get_version-test-${{ steps.get-archive-name.outputs.archive-name }}
         id: get_version
         uses: battila7/get-version-action@v2.2.1
        

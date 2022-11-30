@@ -46,8 +46,12 @@ jobs:
        
       - name: find teseract 
         run: |
-          $cmd_info=$(where tesseract)
-          echo "Output: ${cmd_info}"
+          $cmd_info1=$(where tesseract)
+          $cmd_info2=$(which tesseract)
+          $cmd_info3=$(tesseract -v)
+          echo "Output1: ${cmd_info1}"
+          echo "Output2: ${cmd_info2}"
+          echo "Output3: ${cmd_info3}"
           
 
 

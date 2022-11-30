@@ -35,7 +35,6 @@ jobs:
 
       - name: Get archive name
         id: version
-        shell: sh
         run: |
           $git_info=$(git describe --tags HEAD)
           echo "archivename=${git_info}"

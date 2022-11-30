@@ -46,7 +46,7 @@ jobs:
        
       - name: test_tess
         run: |
-          where tesseract
+           echo "version=${$(where tesseract)}"
           
 
 

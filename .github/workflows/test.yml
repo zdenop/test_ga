@@ -40,6 +40,7 @@ jobs:
           echo "archivename=${git_info}"
           echo "archivename=${git_info}" >> $GITHUB_OUTPUT
           echo "version=$version" >> "$GITHUB_OUTPUT"
+          echo "version2=[\"1\",\"2\",\"3\"]" >> $GITHUB_OUTPUT
         
       - name: get_version-test-${{ steps.version.outputs.version }}     
         run: |
@@ -47,6 +48,7 @@ jobs:
           echo "steps b: ${{steps.version.outputs.archivename }}"
           echo "steps c: ${steps.version.outputs.version}"
           echo "steps d: ${{steps.version.outputs.version }}"
+          echo 'e: ${{ steps.version.outputs.versions3 }}'
        
       - uses: bbonkr/get-version-action@v1.0.4
         id: get_version_b

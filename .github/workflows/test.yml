@@ -40,20 +40,23 @@ jobs:
           echo "VERSION=${GITHUB_REF/refs\/tags\//}" >> $GITHUB_OUTPUT
 
       - name: Get archive name
-        id: get-archive-name
+        id: archivename
         run: |
           $git_info=$(git describe --tags HEAD)
-          echo "archive-name=${git_info}"
-          echo "archive-name=${git_info}" >> $GITHUB_OUTPUT       
+          echo "archivename=${git_info}"
+          echo "archivename=${git_info}" >> $GITHUB_OUTPUT
+          echo "version=$version" >> "$GITHUB_OUTPUT"
         
-      - name: get_version-test-${{ steps.get-archive-name.outputs.archive-name }}
+      - name: get_version-test-${{ steps.archivename.outputs.archivename }}
         id: get_version
         uses: battila7/get-version-action@v2.2.1
      
       - name: try_me
         run: |
-          echo "stes: ${steps.get-archive-name.outputs.archive-name}"
-          echo ${{ steps.get-archive-name.outputs.archive-name }}
+          echo "steps: ${steps.archivename.outputs.archivename}"
+          echo "steps: ${{steps.archivename.outputs.archivename }}"
+          echo "steps: ${steps.archivename.outputs.version}"
+          echo "steps: ${{steps.archivename.outputs.version }}"
        
       - uses: bbonkr/get-version-action@v1.0.4
         id: get_version_b

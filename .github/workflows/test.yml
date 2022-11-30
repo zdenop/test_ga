@@ -41,7 +41,10 @@ jobs:
 
       - name: Get archive name
         id: get-archive-name
-        run: echo "archive-name=$(echo $(git describe --tags HEAD))" >> $GITHUB_ENV       
+        run: |
+          $git_info=$(git describe --tags HEAD)
+          echo "archive-name=${git_info}"
+          echo "archive-name=${git_info}" >> $GITHUB_OUTPUT       
         
       - name: get_version-test-${{ steps.get-archive-name.outputs.archive-name }}
         id: get_version

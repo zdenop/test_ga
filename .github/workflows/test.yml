@@ -49,7 +49,8 @@ jobs:
           echo "steps b: ${{steps.version.outputs.archivename }}"
           echo "steps c: ${steps.version.outputs.version}"
           echo "version: ${{steps.version.outputs.version }}"
-          echo 'version1: ${{ steps.version.outputs.version1 }}
+          echo 'version1: ${{ steps.version.outputs.version1 }}'
+          echo 'version2: ${{ steps.version.outputs.version2 }}'
        
       - uses: bbonkr/get-version-action@v1.0.4
         id: get_version_b

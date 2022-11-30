@@ -37,72 +37,16 @@ jobs:
         id: version
         run: |
           $git_info=$(git describe --tags HEAD)
-          echo "archivename=${git_info}"
-          echo "archivename=${git_info}" >> $GITHUB_OUTPUT
+          echo "version=${git_info}"
           echo "version=${git_info}" >> $env:GITHUB_OUTPUT
-          echo "version1=hello" >> $env:GITHUB_OUTPUT
-          echo "version2=[\"1\",\"2\",\"3\"]" >> $GITHUB_OUTPUT
         
       - name: get_version-test-${{ steps.version.outputs.version }}     
         run: |
-          echo "steps a: ${steps.version.outputs.archivename}"
-          echo "steps b: ${{steps.version.outputs.archivename }}"
-          echo "steps c: ${steps.version.outputs.version}"
-          echo "version: ${{steps.version.outputs.version }}"
-          echo 'version1: ${{ steps.version.outputs.version1 }}'
-          echo 'version2: ${{ steps.version.outputs.version2 }}'
+          echo "we have version: ${{steps.version.outputs.version }}"
        
-      - uses: bbonkr/get-version-action@v1.0.4
-        id: get_version_b
-        with:
-          project: "./package.json"
-      - name: logging
+      - name: Uninstall Perl
         run: |
-          echo "Version=${{ steps.get_version_b.outputs.version }}"
+          choco uninstall strawberryperl
+          
 
-      - name: Run a multi-line script
-        run: |
-          echo "Add other actions to build,"
-          echo  "steps.get_version.outputs.version = " ${{steps.get_version.outputs.version}}
-          echo  "steps.get_version_b.outputs.version = " ${{steps.get_version_b.outputs.version}}
-          echo "test, and deploy your project".
-
-      - name: Set env
-        run: |
-          echo "GITHUB_VER=$(echo $(git describe --tags HEAD))" >> $GITHUB_ENV
-
-      - name: Test
-        run: |
-          echo "GITHUB_SHA_SHORT" $GITHUB_SHA_SHORT
-          echo "env.GITHUB_VER" $env.GITHUB_VER
-          echo "GITHUB_VER:" $GITHUB_VER
-          echo "env.GITVER: ${{env.GITVER}}"
-          echo "steps.get_version_tess.outputs = " ${{steps.get_version_tess.outputs}}
-          echo "steps.get_version_tess.outputs.VERSION = " ${{steps.get_version_tess.outputs.VERSION}}
-
-      - name: Test Show Variables
-        shell: cmd
-        run: |
-          echo "Project env ${{env.GITVER}}"
-          echo "Project GITVER ${GITVER}"
-          echo "Project ${{env.GITVER}}" > version.txt
-
-      - name: Other tests
-        run: |
-          echo $(git describe --tags HEAD)
-          $VER=$(git describe --tags HEAD)
-          echo "set VER to ${VER}"
-          ${env.VERA}=${VER}
-          echo "VERSION_SHORT=${VER}" >> $GITHUB_ENV
-
-      - name: tesseract-"$(git describe --tags HEAD)"-VS2019_win64
-        run: |
-          echo "set well done in ${env.VERSION_SHORT}"
-          echo "set well I done in ${VERSION_SHORT}"
-          echo "set well II done in ${{env.VERSION_SHORT}}"
-          echo "set VERA done in ${{env.VERA}}"
-          echo "set VERO done in ${{env.VERO}}"
-          echo "set VERO done in ${{env.VERO}}"
-          echo "get_version_tess" ${{needs.build.outputs.output1}}
-          echo "VERSION is ${VERSION}"
 

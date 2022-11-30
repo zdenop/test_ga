@@ -44,14 +44,10 @@ jobs:
         run: |
           echo "we have version: ${{steps.version.outputs.version }}"
        
-      - name: Assert Command Line Output
-        uses: GuillaumeFalourd/assert-command-line-output@v2.1
-        with:
-            command_line: where tesseract
-
       - name: find teseract 
         run: |
-           echo $(where tesseract)
+          $cmd_info=$(where tesseract)
+          echo "Output: ${cmd_info}"
           
 
 

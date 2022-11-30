@@ -39,7 +39,7 @@ jobs:
           $git_info=$(git describe --tags HEAD)
           echo "archivename=${git_info}"
           echo "archivename=${git_info}" >> $GITHUB_OUTPUT
-          echo "version=${version}" >> $env:GITHUB_OUTPUT
+          echo "version=${git_info}" >> $env:GITHUB_OUTPUT
           echo "version1=hello" >> $env:GITHUB_OUTPUT
           echo "version2=[\"1\",\"2\",\"3\"]" >> $GITHUB_OUTPUT
         

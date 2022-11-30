@@ -44,9 +44,9 @@ jobs:
         run: |
           echo "we have version: ${{steps.version.outputs.version }}"
        
-      - name: Uninstall Perl
+      - name: test_tess
         run: |
-          choco uninstall strawberryperl
+          where tesseract
           
 
 

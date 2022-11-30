@@ -33,30 +33,20 @@ jobs:
           submodules: recursive
       - run: git fetch --prune --unshallow --tags
 
-      - name: Get the version
-        id: get_version_tess
-        run: |
-          echo "VERSION=${GITHUB_REF/refs\/tags\//}"
-          echo "VERSION=${GITHUB_REF/refs\/tags\//}" >> $GITHUB_OUTPUT
-
       - name: Get archive name
-        id: archivename
+        id: version
         run: |
           $git_info=$(git describe --tags HEAD)
           echo "archivename=${git_info}"
           echo "archivename=${git_info}" >> $GITHUB_OUTPUT
           echo "version=$version" >> "$GITHUB_OUTPUT"
         
-      - name: get_version-test-${{ steps.archivename.outputs.archivename }}
-        id: get_version
-        uses: battila7/get-version-action@v2.2.1
-     
-      - name: try_me
+      - name: get_version-test-${{ steps.version.outputs.version }}     
         run: |
-          echo "steps: ${steps.archivename.outputs.archivename}"
-          echo "steps: ${{steps.archivename.outputs.archivename }}"
-          echo "steps: ${steps.archivename.outputs.version}"
-          echo "steps: ${{steps.archivename.outputs.version }}"
+          echo "steps a: ${steps.version.outputs.archivename}"
+          echo "steps b: ${{steps.version.outputs.archivename }}"
+          echo "steps c: ${steps.version.outputs.version}"
+          echo "steps d: ${{steps.version.outputs.version }}"
        
       - uses: bbonkr/get-version-action@v1.0.4
         id: get_version_b

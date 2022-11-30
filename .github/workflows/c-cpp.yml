@@ -89,8 +89,9 @@ jobs:
         run: |
           $cmd_info1=$(which tesseract)
           echo "cmd_info1: ${cmd_info1}"
+          
           $cmd_info2=$(tesseract -v)
-          echo "cmd_info1: ${cmd_info2}"
+          echo "cmd_info2: ${cmd_info2}"
 
       - name: Display Tesseract Version and Test Command Line Usage
         shell: cmd

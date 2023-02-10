@@ -14,15 +14,14 @@ jobs:
           - { name: macos-11-clang-12-cmake, os: macos-11, cxx: clang++ } # default
           
     steps:
-      - name: Install compilers on Linux
-        run: |
-             sudo apt-get update
-             sudo apt-get install ${{ matrix.config.cxx }} -y
-        if: runner.os == 'Linux'
+      # - name: Install compilers on Linux
+        # run: |
+             # sudo apt-get update
+             # sudo apt-get install ${{ matrix.config.cxx }} -y
+        # if: runner.os == 'Linux'
 
       - name: Install dependencies on Linux
         run: |
-           sudo apt-get install -y ninja-build
            sudo apt-get install -y libwebp-dev
            sudo apt-get install -y libopenjp2-7-dev
            cmake --version
@@ -30,10 +29,8 @@ jobs:
 
       - name: Install dependencies on macOS
         run: |
-           # brew install ninja
-           # brew install openjpeg
-           # brew install webp
-           # ninja --version
+           brew install openjpeg
+           brew install webp
            cmake --version
         if: runner.os == 'macOS'
         

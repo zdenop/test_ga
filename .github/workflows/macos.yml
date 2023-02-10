@@ -29,12 +29,16 @@ jobs:
            cmake --version
            brew list leptonica
            pkg-config --cflags lept
-        
+
+      - name: Checkout Source
+        uses: actions/checkout@v3
+        with:
+             submodules: recursive
+
       - name: Build and run basicapitest (macOS)
         run: |
              export "PKG_CONFIG_PATH=$GITHUB_WORKSPACE/build/inst/lib/pkgconfig/:$(brew --prefix)/opt/libarchive/lib/pkgconfig:$(brew --prefix)/Library/Homebrew/os/mac/pkgconfig/11:$PKG_CONFIG_PATH"
-             cd test
-             echo  $(pkg-config --cflags --libs tesseract lept libarchive libcurl)
+             pkg-config --cflags --libs tesseract lept libarchive libcurl
              ${{ matrix.config.cxx }} -o basicapitest testing/basicapitest.cpp "-I$GITHUB_WORKSPACE/build/inst/include" "-L$GITHUB_WORKSPACE/build/inst/lib" $(pkg-config --cflags --libs tesseract lept libarchive libcurl) -pthread -std=c++11
              ./basicapitest
         if: runner.os == 'macOS'

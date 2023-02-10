@@ -1,0 +1,50 @@
+name: cmake_cfg
+on:
+  workflow_dispatch:
+
+jobs:
+  basictests:
+    name: ${{ matrix.config.name }}
+    runs-on: ${{ matrix.config.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        config:
+          - { name: ubuntu-20.04-gcc-7-cmake, os: ubuntu-20.04, cxx: g++-7 } #installed
+          - { name: macos-11-clang-12-cmake, os: macos-11, cxx: clang++ } # default
+          
+    steps:
+      - name: Install compilers on Linux
+        run: |
+             sudo apt-get update
+             sudo apt-get install ${{ matrix.config.cxx }} -y
+        if: runner.os == 'Linux'
+
+      - name: Install dependencies on Linux
+        run: |
+           sudo apt-get install ninja-build -y
+           cmake --version
+        if: runner.os == 'Linux'
+
+      - name: Install dependencies on macOS
+        run: |
+           brew install ninja
+           ninja --version
+           cmake --version
+        if: runner.os == 'macOS'
+        
+      - name: Checkout Source
+        uses: actions/checkout@v3
+        with:
+             submodules: recursive
+
+      - name: Configure 
+        run: |
+             cd testing
+             cmake -Bbuild
+
+      - name: Display Compiler Version
+        run: |
+             ${{ matrix.config.cxx }} --version
+             git log -3 --pretty=format:'%h %ad %s | %an'
+        if: always()

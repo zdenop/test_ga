@@ -23,16 +23,17 @@ jobs:
       - name: Install dependencies on Linux
         run: |
            sudo apt-get install -y ninja-build
-           sudo apt-get install -y libwebp-dev libopenjpeg-dev
+           sudo apt-get install -y libwebp-dev
+           sudo apt-get install -y libopenjp2-7-dev
            cmake --version
         if: runner.os == 'Linux'
 
       - name: Install dependencies on macOS
         run: |
-           brew install ninja
-           brew install openjpeg
-           brew install webp
-           ninja --version
+           # brew install ninja
+           # brew install openjpeg
+           # brew install webp
+           # ninja --version
            cmake --version
         if: runner.os == 'macOS'
         

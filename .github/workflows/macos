@@ -1,0 +1,32 @@
+name: macos
+on:
+  #push:
+  workflow_dispatch:
+
+jobs:
+  basictests:
+    name: ${{ matrix.config.name }}
+    runs-on: ${{ matrix.config.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        config:
+          - { name: macos-11-clang-12-cmake, os: macos-11, cxx: clang++ } # default
+          - { name: macos-11-gcc-9-cmake, os: macos-11, cxx: g++-9 } #installed         
+    steps:
+      - name: Install dependencies on macOS
+        run: |
+           brew install autoconf automake
+           brew install leptonica
+           brew install libiconv
+           brew install libarchive
+           brew install pango
+           brew install icu4c && brew link icu4c
+           brew install cabextract
+           brew install ninja
+           brew install tesseract           
+           ninja --version
+           cmake --version
+           brew list leptonica
+           pkg-config --cflags lept
+        

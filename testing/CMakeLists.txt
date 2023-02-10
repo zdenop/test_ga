@@ -29,11 +29,11 @@ if(ZLIB_FOUND)
   set(pkgs_private "${pkgs_private} zlib")
 endif()
 if(LIBWEBP_SUPPORT)
-  find_package(WebP ${MINIMUM_WEBPMUX_VERSION} CONFIG REQUIRED)
+  find_package(WebP ${MINIMUM_WEBPMUX_VERSION})  #  CONFIG REQUIRED
   set(pkgs_private "${pkgs_private} libwebp libwebpmux")
 endif()
 if(OPENJPEG_SUPPORT)
-  find_package(OpenJPEG CONFIG REQUIRED)
+  find_package(OpenJPEG)  # CONFIG REQUIRED
   set(pkgs_private "${pkgs_private} libopenjp2")
 endif()
 

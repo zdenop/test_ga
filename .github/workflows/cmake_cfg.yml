@@ -49,7 +49,7 @@ jobs:
       - name: build-leptonica
         run: |
           cd leptonica
-          cmake --build build --config Release --target install
+          sudo cmake --build build --config Release --target install
 
       - name: Display Compiler Version
         run: |

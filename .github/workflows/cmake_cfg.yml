@@ -18,6 +18,7 @@ jobs:
         run: |
              sudo apt-get update
              sudo apt-get install ${{ matrix.config.cxx }} -y
+             ${{ matrix.config.cxx }} --version
         if: runner.os == 'Linux'
 
       - name: Install dependencies on Linux
@@ -51,6 +52,5 @@ jobs:
 
       - name: Display Compiler Version
         run: |
-             ${{ matrix.config.cxx }} --version
              git log -3 --pretty=format:'%h %ad %s | %an'
         if: always()

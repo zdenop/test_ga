@@ -11,8 +11,8 @@ jobs:
       matrix:
         config:
           - { name: ubuntu-20.04-gcc-12-cmake, os: ubuntu-20.04, cxx: g++-12 } #installed
-          - { name: macos-11-clang-12-cmake, os: macos-11, cxx: clang++ } # default
-          
+          # - { name: macos-11-clang-12-cmake, os: macos-11, cxx: clang++ } # default
+
     steps:
       # - name: Install compilers on Linux
         # run: |
@@ -22,8 +22,8 @@ jobs:
 
       - name: Install dependencies on Linux
         run: |
-           sudo apt-get install -y libwebpdemux2 libwebp6 libwebp-dev
-           sudo apt-get install -y libopenjp2-7 libopenjp2-7-dev libopenjp2-tools
+           # sudo apt-get install -y libwebpdemux2 libwebp6 libwebp-dev
+           # sudo apt-get install -y libopenjp2-7 libopenjp2-7-dev libopenjp2-tools
            cmake --version
         if: runner.os == 'Linux'
 
@@ -33,25 +33,30 @@ jobs:
            brew install webp
            cmake --version
         if: runner.os == 'macOS'
-        
+
       - name: Checkout Source
         uses: actions/checkout@v3
         # with:
              # submodules: recursive
 
-      - name: Configure 
+      - name: get-leptonica
         run: |
-             cd testing
-             cmake -Bbuild
+          git clone https://github.com/zdenop/leptonica.git
+          cd leptonica
+          cmake -Bbuild -DBUILD_PROG=OFF -DSW_BUILD=OFF -DBUILD_SHARED_LIBS=ON -DSTRICT_CONF=ON
+
+      - name: build-leptonica
+        run: |
+          cmake --build build --config Release --target install
+
+      # - name: Configure
+        # run: |
+             # cd testing
+             # cmake -Bbuild
 
       - name: Display Compiler Version
         run: |
-             ${{ matrix.config.cxx }} --version
+             g++- --version
              git log -3 --pretty=format:'%h %ad %s | %an'
-        if: always()
 
-      - name: Test
-         working-directory: ${{github.workspace}}/build
-         # Execute tests defined by the CMake configuration.
-         # See https://cmake.org/cmake/help/latest/manual/ctest.1.html for more detail
-         run: ctest -C ${{env.BUILD_TYPE}}
+        if: always()

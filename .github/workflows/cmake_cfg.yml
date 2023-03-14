@@ -14,11 +14,11 @@ jobs:
           # - { name: macos-11-clang-12-cmake, os: macos-11, cxx: clang++ } # default
 
     steps:
-      # - name: Install compilers on Linux
-        # run: |
-             # sudo apt-get update
-             # sudo apt-get install ${{ matrix.config.cxx }} -y
-        # if: runner.os == 'Linux'
+      - name: Install compilers on Linux
+        run: |
+             sudo apt-get update
+             sudo apt-get install ${{ matrix.config.cxx }} -y
+        if: runner.os == 'Linux'
 
       - name: Install dependencies on Linux
         run: |
@@ -49,14 +49,8 @@ jobs:
         run: |
           cmake --build build --config Release --target install
 
-      # - name: Configure
-        # run: |
-             # cd testing
-             # cmake -Bbuild
-
       - name: Display Compiler Version
         run: |
-             g++- --version
+             ${{ matrix.config.cxx }} --version
              git log -3 --pretty=format:'%h %ad %s | %an'
-
         if: always()

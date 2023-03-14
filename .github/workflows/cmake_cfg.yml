@@ -13,8 +13,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        config:
-          os: [ubuntu-20.04,  ubuntu-22.04, macos-12, windows-latest]
+        os: [ubuntu-20.04,  ubuntu-22.04, macos-12, windows-latest]
           # - { name: ubuntu-20.04-gcc-12-cmake, os: ubuntu-20.04, cxx: g++-12 } #installed
           # - { name: macos-11-clang-12-cmake, os: macos-11, cxx: clang++ } # default
 

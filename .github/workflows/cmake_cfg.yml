@@ -18,7 +18,7 @@ jobs:
         run: |
              sudo apt-get update
              sudo apt-get install ${{ matrix.config.cxx }} -y
-             ${{ matrix.config.cxx }} --version
+             # ${{ matrix.config.cxx }} --version
         if: runner.os == 'Linux'
 
       - name: Install dependencies on Linux

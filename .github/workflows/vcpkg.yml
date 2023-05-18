@@ -3,9 +3,10 @@ name: vcpkg-4.1.1
 # build and run basicapitest on windows.
 # macos fails on leptonica build - https://github.com/microsoft/vcpkg/issues/16116
 on:
+  workflow_dispatch:
   #push:
-  schedule:
-    - cron: 0 22 1 * *
+  # schedule:
+  #  - cron: 0 22 1 * *
 
 jobs:
   build:

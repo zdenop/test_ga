@@ -71,3 +71,4 @@ jobs:
           tesseract --list-langs
           echo "Checking OCR process"
           tesseract ${{env.ILOC}}/share/eurotext.bmp -
+          echo "Finised"

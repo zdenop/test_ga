@@ -33,28 +33,22 @@ jobs:
         with:
           submodules: recursive
       - run: git fetch --prune --unshallow --tags
-
-      - name: Build and Install libpng
-        shell: cmd
-        run: |
-             curl -sSL -o lpng${{env.png_ver}}.zip https://download.sourceforge.net/libpng/lpng${{env.png_ver}}.zip
-             unzip.exe  -qq lpng${{env.png_ver}}.zip
-             cd lpng${{env.png_ver}}
-             cmake -Bbuild -DCMAKE_BUILD_TYPE=RelWithDebInfo -DCMAKE_PREFIX_PATH=${{env.ILOC}} -DCMAKE_INSTALL_PREFIX=${{env.ILOC}} -DPNG_TESTS=OFF -DPNG_SHARED=OFF
-             cmake --build build --config RelWithDebInfo --target install
              
       - name: Get archive name
         id: version
         run: |
           $git_info=$(git describe --tags HEAD)
+          $stamp=$(date +'%Y-%m-%d_%H%M%S')
           echo "version=${git_info}"
           echo "version=${git_info}" >> $env:GITHUB_OUTPUT
+          echo "stamp=${stamp}" >> $env:GITHUB_OUTPUT
         
       - name: get_version-test-${{ steps.version.outputs.version }}     
         run: |
           echo "we have version: ${{steps.version.outputs.version }}"
+          echo "we have stamp: ${{steps.version.outputs.stamp }}"
        
-      - name: find teseract 
+      - name: find tesseract 
         run: |
           $cmd_info1=$(where tesseract)
           $cmd_info2=$(which tesseract)

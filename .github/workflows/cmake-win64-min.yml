@@ -23,7 +23,17 @@ jobs:
       - name: Setup Installation Location
         run: |
              mkdir ${{env.ILOC}}/share/tessdata
-             
+
+      - name: Get archive name
+        continue-on-error: true
+        id: version
+        run: |
+          $git_info=$(git describe --tags HEAD)
+          $stamp=$(date +'%Y-%m-%d_%H%M%S')
+          echo "version=${git_info}"
+          echo "version=${git_info}" >> $env:GITHUB_OUTPUT
+          echo "stamp=${stamp}" >> $env:GITHUB_OUTPUT
+          
       - name: download extra files
         shell: cmd
         run: |
@@ -42,19 +52,10 @@ jobs:
              cmake -Bbuild -DCMAKE_BUILD_TYPE=RelWithDebInfo -DCMAKE_PREFIX_PATH=${{env.ILOC}} -DCMAKE_INSTALL_PREFIX=${{env.ILOC}} -DSW_BUILD=OFF -DBUILD_PROG=OFF -DBUILD_SHARED_LIBS=ON
              cmake --build build --target install
 
-      - name: Build and Install tesseract
-        id: build_tess
-        shell: cmd
-        run: |
-             git clone --depth 1 https://github.com/zdenop/tesseract.git
-             cd tesseract
-             cmake -Bbuild -DCMAKE_BUILD_TYPE=RelWithDebInfo -DCMAKE_PREFIX_PATH=${{env.ILOC}} -DCMAKE_INSTALL_PREFIX=${{env.ILOC}} -DSW_BUILD=OFF -DBUILD_SHARED_LIBS=ON -DOPENMP_BUILD=ON  # -DBUILD_TRAINING_TOOLS=ON
-             cmake --build build --target install
-
       - name: Upload Build Results
         uses: actions/upload-artifact@v4
         with:
-          name: tesseract-${{ steps.build_tess.outputs.version }}-VS2022_win64
+          name: tesseract-${{steps.version.outputs.version}}-${{steps.version.outputs.stamp}}-VS2022_win64
           path: ${{env.ILOC}}
           retention-days: 7
 

@@ -33,6 +33,16 @@ jobs:
           submodules: recursive
       - run: git fetch --prune --unshallow --tags
 
+      - name: Build and Install libpng
+        shell: cmd
+        run: |
+             $png_ver=1643
+             curl -sSL -o lpng${git_info}.zip https://download.sourceforge.net/libpng/lpng${git_info}.zip
+             unzip.exe  -qq lpng${git_info}.zip
+             cd lpng${git_info}
+             cmake -Bbuild -DCMAKE_BUILD_TYPE=RelWithDebInfo -DCMAKE_PREFIX_PATH=${{env.ILOC}} -DCMAKE_INSTALL_PREFIX=${{env.ILOC}} -DPNG_TESTS=OFF -DPNG_SHARED=OFF
+             cmake --build build --config RelWithDebInfo --target install
+             
       - name: Get archive name
         id: version
         run: |

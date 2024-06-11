@@ -39,7 +39,7 @@ jobs:
         run: |
              curl -sSL -o lpng${{env.png_ver}}.zip https://download.sourceforge.net/libpng/lpng${{env.png_ver}}.zip
              unzip.exe  -qq lpng${{env.png_ver}}.zip
-             cd lpng$git_info
+             cd lpng${{env.png_ver}}
              cmake -Bbuild -DCMAKE_BUILD_TYPE=RelWithDebInfo -DCMAKE_PREFIX_PATH=${{env.ILOC}} -DCMAKE_INSTALL_PREFIX=${{env.ILOC}} -DPNG_TESTS=OFF -DPNG_SHARED=OFF
              cmake --build build --config RelWithDebInfo --target install
              
